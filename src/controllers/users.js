@@ -41,7 +41,7 @@ module.exports.createUser = (req, res, next) => {
       if (error.name === 'ValidationError') {
         return next(new ValidationError('Некорректные данные пользователя'));
       }
-        return next(error);
+      return next(error);
     });
 };
 
