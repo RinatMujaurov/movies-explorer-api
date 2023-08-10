@@ -36,12 +36,12 @@ module.exports.createUser = (req, res, next) => {
     })
     .catch((error) => {
       if (error.code === 11000) {
-        next(new ConflictError('Email уже существует'));
+        return next(new ConflictError('Email уже существует'));
       }
       if (error.name === 'ValidationError') {
-        next(new ValidationError('Некорректные данные пользователя'));
+        return next(new ValidationError('Некорректные данные пользователя'));
       }
-      next(error);
+        return next(error);
     });
 };
 
@@ -54,7 +54,6 @@ module.exports.getUserInfo = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       }
-
       res.send(user);
     })
     .catch(next);

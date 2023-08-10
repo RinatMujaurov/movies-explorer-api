@@ -4,12 +4,14 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 const routes = require('./src/routes/index');
 const apiLimiter = require('./src/middlewares/rateLimiter');
 const errorHandler = require('./src/middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./src/middlewares/logger');
+const { PORT_DEV, DB_URL_DEV } = require('./src/utils/configurations');
 
-const { DB_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb', PORT = 3000 } = process.env;
+const { DB_URL = DB_URL_DEV, PORT = PORT_DEV } = process.env;
 
 mongoose
   .connect(DB_URL, {
@@ -28,14 +30,12 @@ app.get('/crash-test', () => {
 });
 
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 app.use(helmet());
-app.use(apiLimiter);
-
 app.use(requestLogger);
-
+app.use(apiLimiter);
 app.use(routes);
-
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);

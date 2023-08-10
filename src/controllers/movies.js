@@ -19,7 +19,7 @@ module.exports.createMovie = (req, res, next) => {
     year,
     description,
     image,
-    trailer,
+    trailerLink,
     nameRU,
     nameEN,
     thumbnail,
@@ -32,7 +32,7 @@ module.exports.createMovie = (req, res, next) => {
     year,
     description,
     image,
-    trailer,
+    trailerLink,
     nameRU,
     nameEN,
     thumbnail,
@@ -65,10 +65,10 @@ module.exports.deleteMovie = (req, res, next) => {
         throw new ForbiddenError('У вас нет прав на удаление этой карточки');
       }
 
-      return movie.remove();
+      return movie.deleteOne();
     })
     .then((deletedMovie) => {
-      res.json(deletedMovie);
+      res.send(deletedMovie);
     })
     .catch((err) => {
       if (err.name === 'CastError' && err.kind === 'ObjectId') {
